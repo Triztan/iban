@@ -70,9 +70,11 @@ class IbanServiceProvider extends ServiceProvider
 
 	protected function extendValidator($rule)
 	{
-		$method = 'validate' . studly_case($rule);
-		$translation = $this->app['translator']->get('iban::validation');
+	    if (config('app.central_initialized')) {
+                $method = 'validate' . studly_case($rule);
+                $translation = $this->app['translator']->get('iban::validation');
 
-		$this->app['validator']->extend($rule, 'TPWeb\Iban\Validation\ValidatorExtensions@' . $method, $translation[$rule]);
+                $this->app['validator']->extend($rule, 'TPWeb\Iban\Validation\ValidatorExtensions@' . $method, $translation[$rule]);
+	    }
 	}
 }
